@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torchvision
 from torchvision import transforms
-
+#######
 
 def set_seed(seed):
     random.seed(seed)
@@ -21,10 +21,10 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-
+#questionを一部変更
 def process_text(text):
     # lowercase
-    text = text.lower()
+    text = text.lower()#小文字にする
 
     # 数詞を数字に変換
     num_word_to_digit = {
@@ -33,7 +33,7 @@ def process_text(text):
         'ten': '10'
     }
     for word, digit in num_word_to_digit.items():
-        text = text.replace(word, digit)
+        text = text.replace(word, digit)#数詞を数字に変更
 
     # 小数点のピリオドを削除
     text = re.sub(r'(?<!\d)\.(?!\d)', '', text)
@@ -76,7 +76,7 @@ class VQADataset(torch.utils.data.Dataset):
         self.idx2answer = {}
 
         # 質問文に含まれる単語を辞書に追加
-        for question in self.df["question"]:
+        for question in self.df["question"]:#question, answerを持つDataFrameのquestion
             question = process_text(question)
             words = question.split(" ")
             for word in words:
