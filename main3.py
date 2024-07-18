@@ -1,3 +1,5 @@
+#ResNet18、データ拡張
+
 import re
 import random
 import time
@@ -18,17 +20,6 @@ length=3909
 from transformers import BertTokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
-
-def set_seed(seed):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-
-#questionを一部変更
 def process_text(text):
 #   print("process_text",type(text))
   return tuple(tokenizer(text,max_length=length,padding='max_length')['input_ids'])
@@ -124,14 +115,6 @@ class VQADataset(torch.utils.data.Dataset):
         #             self.question2idx[word] = len(self.question2idx)
         # #tokenizerは逆変換辞書はなし
         # self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
-        # 質問文に含まれる単語を辞書に追加
-        for question in self.df["question"]:#question, answerを持つDataFrameのquestion
-            question = process_text(question)
-            words = question.split(" ")
-            for word in words:
-                if word not in self.question2idx:
-                    self.question2idx[word] = len(self.question2idx)
-        self.idx2question = {v: k for k, v in self.question2idx.items()}  # 逆変換用の辞書(question)
 
         #answer2idx辞書は、文章を新しい順に格納して、文章と数字一文字でキー、値
         #1つの回答文を1つの値にしている
